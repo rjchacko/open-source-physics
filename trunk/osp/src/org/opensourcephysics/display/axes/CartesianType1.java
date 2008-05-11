@@ -522,6 +522,7 @@ public class CartesianType1 extends AbstractAxes implements CartesianAxes, Dimen
       graphics.setColor(foreground);
       double chop = Math.abs(yTickSize/100);
       int counter = numberYTickMarks;
+      yTickWidth=7;
       for(double ypos = yTmpStart;ypos<=ytickMax;ypos = gridStep(ygrid, ypos, yTickSize, ylog)) {
         if(--counter<0) {
           break;
@@ -559,6 +560,8 @@ public class CartesianType1 extends AbstractAxes implements CartesianAxes, Dimen
         int labelWidth = labelFontMetrics.stringWidth(yticklabel);
         // NOTE: 4 pixel spacing between axis and labels.
         graphics.drawString(yticklabel, leftGutter-labelWidth-4, yCoord1+offset); // draw tick label
+        int sw=labelFontMetrics.stringWidth(yticklabel);
+        yTickWidth=Math.max(yTickWidth,sw);
       }
       if(ylog||drawMinorYGrid) {
         // Draw in grid lines that don't have labels.
@@ -810,7 +813,8 @@ public class CartesianType1 extends AbstractAxes implements CartesianAxes, Dimen
     if(yLine!=null) {
       double mid = topGutter/2.0+(panel.getHeight()-bottomGutter)/2;
       yLine.setY(mid);
-      yLine.setX(panel.getLeftGutter()-yTickWidth-0.7*labelFontMetrics.getHeight());
+      double x=panel.getLeftGutter()-yTickWidth-0.7*labelFontMetrics.getHeight();
+      yLine.setX(Math.max(12,x));
       //yLine.setX(15);
       yLine.draw(panel, graphics);
     }
